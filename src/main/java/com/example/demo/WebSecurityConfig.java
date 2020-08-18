@@ -28,13 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 								.permitAll().anyRequest().authenticated()
 								.and().formLogin();
 		
-		
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// TODO Auto-generated method stub
-		
 		auth.userDetailsService(userDetailsService);
 	}
 	

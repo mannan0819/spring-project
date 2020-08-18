@@ -11,14 +11,17 @@ import com.example.demo.model.User;
 
 public class myUserDetails implements UserDetails{
 	
-
-
+	private String firstname;
+	private String lastname;
 	private String username;
 	private String password;
 	
 	public myUserDetails(User user){
 		this.username = user.getUsername();
 		this.password = user.getPassword();
+		this.firstname = user.getFirstname();
+		this.lastname = user.getLastname();
+		System.out.println("mapped" + this.firstname);
 	}
 	
 	@Override
@@ -37,6 +40,12 @@ public class myUserDetails implements UserDetails{
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return this.username;
+	}
+	
+	
+	public String getFirtname() {
+		// TODO Auto-generated method stub
+		return this.firstname;
 	}
 
 	@Override
