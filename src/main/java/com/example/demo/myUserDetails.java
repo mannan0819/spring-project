@@ -21,7 +21,6 @@ public class myUserDetails implements UserDetails{
 		this.password = user.getPassword();
 		this.firstname = user.getFirstname();
 		this.lastname = user.getLastname();
-		System.out.println("mapped" + this.firstname);
 	}
 	
 	@Override

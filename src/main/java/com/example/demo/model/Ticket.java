@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +22,7 @@ public class Ticket {
 	private LocalDate Edited;
     private String Status;
     private String Priority;
+    @Lob
     private String Description;
     private Long groupid;
     private String Filename;

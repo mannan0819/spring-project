@@ -1,10 +1,14 @@
 package com.example.demo.model;
 
-import javax.persistence.Entity;
+import javax.persistence.Entity; 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
 
 @Entity
 @Table(name = "user")
@@ -12,9 +16,15 @@ public class User {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	@NotNull
+	@Size(min=3, message="requied")
 	private String username;
-	private String Password;
+	@NotNull
+	private String Password;	
+	@NotNull
 	private String Firstname;
+	@NotNull
 	private String Lastname;
 	
 	public String getUsername() {
@@ -45,9 +55,10 @@ public class User {
 		
 	}
 	
-	public User(String fisrtname, String lastname) {
+	public User(String fisrtname, String lastname, String username) {
 		Firstname = fisrtname;
 		Lastname = lastname;
+		this.username = username;
 	}
 	
 	public String getFisrtname() {
@@ -66,7 +77,8 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "user [Fisrtname=" + Firstname + ", Lastname=" + Lastname + "]";
+		return "User [id=" + id + ", username=" + username + ", Password=" + Password + ", Firstname=" + Firstname
+				+ ", Lastname=" + Lastname + "]";
 	}
 
 	public Long getId() {

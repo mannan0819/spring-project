@@ -27,8 +27,9 @@
 
   <!-- Page Wrapper -->
   <div id="wrapper">
-	<div th:insert="fragments.html :: nav(${ticketGrp}, ${activePage}, ${activeId})">
+	<div th:insert="fragments.html :: nav(${ticketGrp}, ${activePage})">
 	</div>
+
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -36,10 +37,7 @@
       <!-- Main Content -->
       <div id="content">
 
-
- 		<div th:insert="toptoolbar.html :: toptoolbar(${Name})"></div>
-
-
+        <div th:insert="toptoolbar.html :: toptoolbar(${Name})"></div>
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
@@ -69,7 +67,6 @@
 
 
         </div>
-        </div>
         <!-- /.container-fluid -->
 
       </div>
@@ -95,6 +92,7 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
+
 
 
 

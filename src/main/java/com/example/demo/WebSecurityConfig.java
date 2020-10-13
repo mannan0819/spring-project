@@ -23,10 +23,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		//http.authorizeRequests()
 			//.antMatchers("/", "/log").permitAll()
 			//.anyRequest().authenticated();
-		http.authorizeRequests().antMatchers("/","/log","/test","/logi","/home","/template/**","/group/**", "/edittic/**", "/edittic",
-				"/cticket","/cticket/**","/ticket/**","/dticket/**", "/deletetic/**", "/cgroup", "/cgroup/**", "/deletegroup/**")
+		http.authorizeRequests().antMatchers("/","/log","/test","/template/**","/group/**", "/edittic/**", "/edittic", "/username",
+				"/cticket","/cticket/**","/ticket/**","/dticket/**", "/comment","/deletetic/**", "/cgroup", "/cgroup/**", "/deletegroup/**","/createuser",
+				"/h2-console","/h2-console/**")
 								.permitAll().anyRequest().authenticated()
-								.and().formLogin();
+								.and()
+								.formLogin()
+				                .loginPage("/login")
+				                .permitAll()
+				                .and()
+				                .logout()
+				                .logoutSuccessUrl("/")
+				                .permitAll();
+		
+		//TO ENABLE USE OF H2
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+
 		
 	}
 
