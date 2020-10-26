@@ -17,6 +17,7 @@
 
   <!-- Custom styles for this template -->
   <link href="/template/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="/template/css/style.css" rel="stylesheet">
 
   <!-- Custom styles for this page -->
   <link href="/template/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -45,7 +46,7 @@
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
        
         
-        <form class="user" action="#" th:action="@{/edittic}" th:object="${ticket}" method="post">
+        <form class="user" action="#" th:action="@{/edittic}" th:object="${ticket}" method="post" enctype="multipart/form-data">
             <div class="form-group row">
             	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
             		<label class="ml-2 h5">Title</label>
@@ -82,12 +83,35 @@
             		<textarea class="form-control form-control-user" th:field="*{Description}" placeholder="Description"></textarea>
             	</div>
             </div>
+            
+            
+            <div class="form-group row">
+            	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
+            		<label class="ml-2 h5">Attachments </label>
+            		<div class="ml-2" th:classappend="${ticket.Isimg ? '' : 'hide'}">
+	            		<div class="imageHeight">
+			            		<img class="image" th:src="@{${'/img/' + ticket.Filename}}" alt="Image not Loaded"/>
+		            	</div>
+		            	<div>
+		            		<input type="checkbox" id="check" value="Delete image" th:field="*{Isimg}"/>
+		            		<label for="check">Keep the Current Image</label>
+		            	</div>
+	            	</div>
+	            	<div>
+	            		<input class="mt-2 ml-2" type="file" name="file" />
+	            	</div>
+            	</div>
+            </div>
+            
+            
+            
             <input type="hidden" th:field="*{Id}"  >
             <input type="hidden" th:field="*{groupid}" >
             <input type="hidden" th:field="*{Author}"  >
             <input type="hidden" th:field="*{Created}"  >
             <input type="hidden" th:field="*{Edited}"  >
             <input type="hidden" th:field="*{Filename}"  >
+            <!--  <input type="hidden" th:field="*{Isimg}"  >-->
             <div class="form-group row">
             	<div class="col-sm-6 ml-4 mb-2 mt-1 mb-sm-0">
             	

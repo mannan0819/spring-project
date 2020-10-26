@@ -4,7 +4,19 @@
   height: auto;
 }
 
+.hide {
+	display:none;
+}
 
+.imageHeight{
+	width: 550px;
+}
+.image{
+    max-height:500px;
+    max-width:500px;
+    height:auto;
+    width:auto;
+}
 
 .figure {
   display: inline-block;

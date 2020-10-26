@@ -5,13 +5,13 @@ INSERT INTO User (ID,FIRSTNAME,LASTNAME,USERNAME,PASSWORD) VALUES (9,'Joe','Rand
 INSERT INTO COMMENT (ID, BODY, CREATED, EDITED, USERNAME, USRID, TICKETID) VALUES (1,'This sis the body','2018-02-02','2018-02-03','mannan', 1,1);
 
 INSERT INTO Ticket (ID, TITLE, AUTHOR, CREATED, EDITED, STATUS, PRIORITY, DESCRIPTION, GROUPID, FILENAME, ISIMG) VALUES 
-(1,'Ticket 1', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'name',True);
+(1,'Ticket 1', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'sample.png',True);
 INSERT INTO Ticket (ID, TITLE, AUTHOR, CREATED, EDITED, STATUS, PRIORITY, DESCRIPTION, GROUPID, FILENAME, ISIMG) VALUES 
-(2,'Ticket 2', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'name',True);
+(2,'Ticket 2', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'',False);
 INSERT INTO Ticket (ID, TITLE, AUTHOR, CREATED, EDITED, STATUS, PRIORITY, DESCRIPTION, GROUPID, FILENAME, ISIMG) VALUES 
-(3,'Ticket 3', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'name',True);
+(3,'Ticket 3', 'Mannan','2018-02-02','2018-02-03','1','2','This is a ticket. and its a description',2,'',False);
 INSERT INTO Ticket (ID, TITLE, AUTHOR, CREATED, EDITED, STATUS, PRIORITY, DESCRIPTION, GROUPID, FILENAME, ISIMG) VALUES 
-(4,'Ticket 4', 'Mannan','2018-02-02','2018-02-03','Open','High','This is a ticket. and its a description',2,'name',True);
+(4,'Ticket 4', 'Mannan','2018-02-02','2018-02-03','Open','High','This is a ticket. and its a description',2,'',False);
 
 INSERT INTO TICKET_GROUP (ID, NAME, AUTHOR, CREATED, DESCRIPTION) VALUES 
 (1,'Group 1', 'Mannan','2018-02-02','This group is for Systems.');

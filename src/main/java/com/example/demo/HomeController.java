@@ -2,12 +2,16 @@ package com.example.demo;
 
 import com.example.demo.dao.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +31,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.*;
 import com.example.demo.model.Ticket;
 import com.example.demo.model.Comment;
 import com.example.demo.model.TicketGroup;
 import com.example.demo.model.User;
+import com.example.demo.services.IImageService;
 
-import javassist.tools.rmi.ObjectNotFoundException;
 
 @Controller
 public class HomeController {
 
-	private static Map<String, User> usrrepo = new HashMap<>();
+	//private static Map<String, User> usrrepo = new HashMap<>();
+
+	//@Autowired
+	//StorageService storageService;
 
 	@Autowired
 	UserRepository usrRepo;
+	
+	@Autowired
+	IImageService imgSevice;
 
 	@Autowired
 	TicketRepository ticketRepo;
@@ -55,19 +67,18 @@ public class HomeController {
 	@Autowired
 	CommentRepo commentRepo;
 
-
 	@RequestMapping (value="/test")
 	public String testing(Authentication auth, Model model) {
-		System.out.println(auth);
-		model.addAttribute("activePage", "Home");
-		model.addAttribute("ticketGrp", ticketGrpRepo.findAll());
-		if(auth != null) {
-			myUserDetails usrDetail = (myUserDetails) auth.getPrincipal();
-			model.addAttribute("Name", usrDetail.getFirtname());
-		}
-		else {
-			model.addAttribute("Name", "Not logged in");
-		}
+		model.addAttribute("User", new User());
+		return "testst";
+	}
+
+	@PostMapping (value="/test")
+	public String testingPost(@RequestParam("file") MultipartFile file, Model model) {
+		String name = imgSevice.save(file);
+		System.out.println(file.getOriginalFilename());
+		model.addAttribute("Filename", name);
+		model.addAttribute("User", new User());
 		return "testst";
 	}
 
@@ -119,10 +130,10 @@ public class HomeController {
 		return "index";
 	}
 
-	
-	
-	
-	
+
+
+
+
 	@RequestMapping(value = "/cgroup")
 	public String createGroup(Authentication auth, Model model) {
 		System.out.println("crete tic group reached");
@@ -172,16 +183,16 @@ public class HomeController {
 	public String DeleteGrpPost(@PathVariable Long Id) {
 		TicketGroup grp = ticketGrpRepo.findById(Id).get();
 
-		
+
 		///NEED TO DELETE ALL TICCKETS
 		ticketGrpRepo.deleteById(Id);
 		return "redirect:/";
 	}
 
-	
-	
-	
-	
+
+
+
+
 	//---------------------TICKETS----------------------------
 
 	@RequestMapping(value = "/group/{Id}")
@@ -205,13 +216,15 @@ public class HomeController {
 
 		return "tickets";
 	}
-	
-	
-	
-	
+
+
+
+
 	@RequestMapping(value = "/cticket/{Id}")
 	public String createTicket(@PathVariable Long Id, Model model, Authentication auth) {
 		System.out.println("crete tic reached");
+		
+		//FILE IS IMAGE VALIDATIONS NEEDS TO BE DONE
 		if(auth != null) {
 			myUserDetails usrDetail = (myUserDetails) auth.getPrincipal();
 			model.addAttribute("Name", usrDetail.getFirtname());
@@ -229,7 +242,21 @@ public class HomeController {
 
 
 	@PostMapping (value = "/cticket")
-	public String submitTicket (@ModelAttribute Ticket ticket, Model model) {
+	public String submitTicket (@ModelAttribute Ticket ticket, Model model, @RequestParam("file") MultipartFile file) {
+		
+		System.out.println(file.getOriginalFilename());
+		String saveFileName = file.isEmpty() ? "-1" : imgSevice.save(file);
+		
+		//0 if not an image
+		if(saveFileName.equals("0")) {
+			ticket.setIsimg(false);
+		}
+		else if(!saveFileName.equals("-1")) { // -1 if the file is empty
+			ticket.setIsimg(true);
+			ticket.setFilename(saveFileName);
+			System.out.println(saveFileName);
+		}
+		
 		model.addAttribute("ticket", ticket);
 		ticket.setCreated(LocalDate.now());
 		ticket.setEdited(LocalDate.now());
@@ -258,10 +285,10 @@ public class HomeController {
 	@RequestMapping(value = "/dticket/{Id}")
 	public String dTicket(@PathVariable Long Id, Model model, Authentication auth) {
 		System.out.println("crete tic reached");
-		
+
 		Ticket tic = ticketRepo.findById(Id).get();
 		model.addAttribute("ticket", tic);
-		
+
 		List<Comment> comms = commentRepo.findAllByTicketid(tic.getId());
 		model.addAttribute("comms", comms);
 		model.addAttribute("ticketGrp", ticketGrpRepo.findAll());
@@ -279,7 +306,7 @@ public class HomeController {
 		return "deticket";
 	}
 
-	
+
 	@PostMapping (value = "/comment")
 	public String submitComment (@ModelAttribute Comment comment) {
 
@@ -326,6 +353,7 @@ public class HomeController {
 
 		model.addAttribute("ticket", tic);
 		System.out.println("edit called " + tic);
+		//AUTHORIZATION
 		if(auth != null) {
 			myUserDetails usrDetail = (myUserDetails) auth.getPrincipal();
 			model.addAttribute("Name", usrDetail.getFirtname());
@@ -340,21 +368,23 @@ public class HomeController {
 	}
 
 	@PostMapping(value="/edittic")
-	public String PostEditTicket(@ModelAttribute Ticket ticket, Model model) {
+	public String PostEditTicket(@ModelAttribute Ticket ticket, Model model, @RequestParam("file") MultipartFile file) {
+
+		String saveFileName = file.isEmpty() ? "-1" : imgSevice.save(file);
+
+		//0 if file is not an image && -1 is its empty
+		if((!saveFileName.equals("0")) && (!saveFileName.equals("-1"))) {
+			ticket.setIsimg(true);
+			ticket.setFilename(saveFileName);
+		}
+		
 		model.addAttribute("ticket", ticket);
 		ticket.setEdited(LocalDate.now());
-		//System.out.println(ticket);
-
-		System.out.println("edit POST called " + ticket);
 		ticketRepo.save(ticket);
-
 		Long grpId = ticket.getGroupid();
-
+		
 		return "redirect:/group/" + grpId;
 	}
-
-
-
 
 
 
@@ -417,7 +447,7 @@ public class HomeController {
 	//List All
 	@GetMapping(value = "/user")
 	public List<User> test(Model model) {
-		 model.addAttribute("ticket", ticketRepo.findById((long) 1));
+		model.addAttribute("ticket", ticketRepo.findById((long) 1));
 		System.out.println("GEt REQ");
 		return usrRepo.findAll();
 	}

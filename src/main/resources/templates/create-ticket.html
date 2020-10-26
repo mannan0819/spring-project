@@ -47,7 +47,7 @@
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
        
         
-        <form class="user" action="#" th:action="@{/cticket}" th:object="${ticket}" method="post">
+        <form class="user" action="#" th:action="@{/cticket}" th:object="${ticket}" method="post" enctype="multipart/form-data">
             <div class="form-group row">
             	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
             		<label class="ml-2 h5">Title</label>
@@ -65,19 +65,6 @@
 					</select>
 				</div>
 			</div>
-			<!--  
-			<div class="form-group row">
-            	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
-            		<label class="ml-2 h5">Status</label>
-            		<input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Status">
-            	</div>
-            </div>
-            <div class="form-group row">
-            	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
-            		<label class="ml-2 h5">Priority</label>
-            		<input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="Priority">
-            	</div>
-            </div>-->
             
 			<div class="form-group row">
             	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
@@ -90,6 +77,13 @@
 					</select>
 				</div>
 			</div>
+			<div class="form-group row">
+            	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
+            		<label class="ml-2 h5">File to upload:</label>
+            		<input class="bg-light" type="file" name="file" />
+            	</div>
+            </div>
+			
             <div class="form-group row">
             	<div class="col-sm-6 ml-2 mb-2 mb-sm-0">
             		<label class="ml-2 h5">Description</label>
